@@ -1,11 +1,4 @@
 # ============================================================================
-# UNIVERSAL ZSH CONFIGURATION
-# ============================================================================
-# This file contains settings that work across all platforms (macOS, Linux)
-# OS-specific tool initialization is deferred to ~/.zshrc.macos or ~/.zshrc.linux
-# which are sourced at the end of this file
-
-# ============================================================================
 # BASIC ZSH SETTINGS
 # ============================================================================
 # These should come first - they set fundamental shell behavior
@@ -25,11 +18,11 @@ HISTFILE=~/.zsh_history   # Where to save history
 # ENVIRONMENT VARIABLES
 # ============================================================================
 # Export these before initializing tools so they see the right environment
-
+#
 # Path variables
 export PATH="$HOME/.cargo/bin:$PATH" # Use cargo for Rust packages
 
-# Kubernetes config
+# Kubernetes config (from your .bashrc)
 export KUBECONFIG=~/.kube/config
 
 # Color support (ensures colors work properly, especially over SSH)
@@ -37,18 +30,22 @@ export COLORTERM=truecolor
 export STARSHIP_FORCE_COLORS=1
 
 # Man pages viewer - use bat for syntax-highlighted man pages
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 
 # fzf configuration - set BEFORE sourcing fzf so it uses these settings
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --follow --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_OPTS="--preview 'bat --color=always --style=numbers --line-range=:500 {}'"
+export FZF_DEFAULT_OPTS="--preview 'batcat --color=always --style=numbers --line-range=:500 {}'"
 
 
 # ============================================================================
 # ALIASES
 # ============================================================================
 # Define aliases before functions that might use them
+
+# Ubuntu-specific tool name corrections
+alias bat='batcat'
+alias fd='fdfind'
 
 # Modern CLI replacements (eza for ls)
 alias ls='eza --color=always --group-directories-first'
@@ -63,6 +60,7 @@ alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
 # Custom utility aliases
+# alias k8s-backup='~/scripts/k8s-export-all.sh' # Easy k8s backup (see script for mechanics) # no longer relevant
 alias mkdir='mkdir -p' # Always create parent directory if needed 
 
 # kubectl shortcuts
@@ -95,7 +93,6 @@ alias kexec='kubectl exec -it'
 
 alias kdel='kubectl delete'
 
-
 # ============================================================================
 # FUNCTIONS
 # ============================================================================
@@ -112,7 +109,6 @@ etcdctl-k3s() {
 alias use-etcdctl='etcdctl-k3s' 
 # backup in case I forget the key
 
-
 # ============================================================================
 # TOOL INITIALIZATIONS
 # ============================================================================
@@ -127,9 +123,31 @@ eval "$(zoxide init zsh)"
 
 
 # ============================================================================
+# FZF - FUZZY FINDER
+# ============================================================================
+# Source fzf AFTER setting FZF_* environment variables above
+
+source /usr/share/doc/fzf/examples/key-bindings.zsh
+source /usr/share/doc/fzf/examples/completion.zsh
+
+
+# ============================================================================
+# ZSH PLUGINS
+# ============================================================================
+# Load plugins last (syntax-highlighting MUST be last)
+
+# Fish-like autosuggestions from history
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# CRITICAL: This must be the LAST plugin sourced
+# Syntax highlighting colors your commands as you type
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+
+# ============================================================================
 # AUTO-START TOOLS (OPTIONAL)
 # ============================================================================
-# These modify shell startup behavior, so they go before OS-specific config
+# These modify shell startup behavior, so they go at the very end
 
 # 1. Ensure we aren't already inside Zellij
 # 2. Check if the parent process ($PPID) is mosh-server
@@ -138,19 +156,3 @@ if [[ -z "$ZELLIJ" ]]; then
         zellij attach -c || zellij
     fi
 fi
-
-
-# ============================================================================
-# OS-SPECIFIC OVERRIDES
-# ============================================================================
-# Load platform-specific tool paths and configurations
-# These files handle fzf, zsh-autosuggestions, zsh-syntax-highlighting paths
-
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    [[ -f ~/.zshrc.macos ]] && source ~/.zshrc.macos
-elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    [[ -f ~/.zshrc.linux ]] && source ~/.zshrc.linux
-fi
-
-# Hostname-specific configuration (useful for server-specific tweaks)
-[[ -f ~/.zshrc.$(hostname) ]] && source ~/.zshrc.$(hostname)

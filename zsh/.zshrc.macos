@@ -1,0 +1,31 @@
+# ============================================================================
+# macOS-SPECIFIC ZSH CONFIGURATION
+# ============================================================================
+# This file is sourced by ~/.zshrc on macOS systems
+# It handles Homebrew paths for fzf and plugin installation
+
+# ============================================================================
+# FZF - FUZZY FINDER (Homebrew paths)
+# ============================================================================
+
+BREW_PREFIX=$(brew --prefix 2>/dev/null)
+if [ -n "$BREW_PREFIX" ]; then
+    source "$BREW_PREFIX/opt/fzf/shell/key-bindings.zsh" 2>/dev/null || true
+    source "$BREW_PREFIX/opt/fzf/shell/completion.zsh" 2>/dev/null || true
+fi
+
+# ============================================================================
+# ZSH PLUGINS (Homebrew paths)
+# ============================================================================
+# Load plugins - syntax-highlighting MUST be last
+
+# Fish-like autosuggestions from history
+if [ -n "$BREW_PREFIX" ]; then
+    source "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" 2>/dev/null || true
+fi
+
+# CRITICAL: This must be the LAST plugin sourced
+# Syntax highlighting colors your commands as you type
+if [ -n "$BREW_PREFIX" ]; then
+    source "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" 2>/dev/null || true
+fi

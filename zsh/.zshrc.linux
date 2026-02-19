@@ -1,0 +1,33 @@
+# ============================================================================
+# LINUX-SPECIFIC ZSH CONFIGURATION
+# ============================================================================
+# This file is sourced by ~/.zshrc on Linux systems
+# It handles standard Linux paths for plugin installation
+
+# ============================================================================
+# FZF - FUZZY FINDER (Linux paths)
+# ============================================================================
+
+if [[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then
+    source /usr/share/doc/fzf/examples/key-bindings.zsh
+fi
+
+if [[ -f /usr/share/doc/fzf/examples/completion.zsh ]]; then
+    source /usr/share/doc/fzf/examples/completion.zsh
+fi
+
+# ============================================================================
+# ZSH PLUGINS (Linux paths)
+# ============================================================================
+# Load plugins - syntax-highlighting MUST be last
+
+# Fish-like autosuggestions from history
+if [[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+    source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+
+# CRITICAL: This must be the LAST plugin sourced
+# Syntax highlighting colors your commands as you type
+if [[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
