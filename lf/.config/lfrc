@@ -1,0 +1,20 @@
+# Basic settings
+set hidden true
+set ignorecase true
+set icons true
+
+# Custom commands
+cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
+cmd touch $touch "$(echo $* | tr ' ' '\ ')"
+
+# Key mappings
+map <enter> open
+map D delete
+map md mkdir
+map mf touch
+
+# Use trash instead of rm (if trash-cli installed)
+cmd trash $trash-put $fx
+map d trash
+
+set previewer ~/.config/lf/preview.sh

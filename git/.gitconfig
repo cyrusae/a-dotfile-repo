@@ -1,0 +1,39 @@
+[user]
+  email = cyrus.eosphoros@gmail.com
+  name = Cyrus AE
+
+[init]
+  defaultBranch = main
+
+[core]
+  editor = nvim
+  autocrlf = input
+  excludesfile = ~/.gitignore
+
+[url "https://github.com"]
+  insteadOf = gh:
+
+[url "https://gist.github.com"]
+  insteadOf = gist:
+
+[github]
+  user = cyrusae
+
+[push]
+ 	autoSetupRemote = true  # so you can just `git push` on a new branch without --set-upstream
+
+[pull]
+ 	rebase = false          # explicit: merge on pull, not rebase (change to true if you prefer)
+
+[diff]
+ 	colorMoved = zebra      # visually distinguishes moved lines from changed lines
+
+[merge]
+ 	conflictstyle = diff3   # shows base/ours/theirs in conflict markers, much more readable
+
+[alias]
+	 st = status
+	 co = checkout
+	 lg = log --oneline --graph --decorate --all   # pretty branch graph
+	 undo = reset HEAD~1 --mixed                   # undo last commit, keep changes staged
+	 aliases = config --get-regexp alias           # list all aliases

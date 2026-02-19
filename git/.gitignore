@@ -1,0 +1,36 @@
+# Sane defaults
+
+# Secrets and local config
+.env
+.env.*
+!.env.example        # allow the example/template version
+terraform.tfvars
+*.tfvars
+!terraform.tfvars.example
+*.pem
+*.key
+
+# OS debris
+.DS_Store
+.DS_Store?
+Thumbs.db
+desktop.ini
+*~
+
+# Editor debris
+.vscode/
+.idea/
+*.swp
+*.swo
+.vim/
+
+# Language/tool cache
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+.npm/
+.renv/
+
+# Logs
+*.log
