@@ -1,0 +1,36 @@
+# ============================================================================
+# LINUX-SPECIFIC TMUX CONFIGURATION
+# ============================================================================
+# Clipboard integration with Wayland (wl-copy) or X11 (xclip)
+# Automatically detects environment and uses the appropriate tool
+
+# Detect if we're on Wayland or X11 and set clipboard command accordingly
+if-shell 'test -n "$WAYLAND_DISPLAY"' {
+  # Wayland (e.g., Sway, GNOME on Wayland, KDE Plasma on Wayland)
+  # Copy mode: pipe selection to wl-copy when releasing mouse
+  bind -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "wl-copy"
+  
+  # Copy mode: yank with 'y' to wl-copy
+  bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "wl-copy"
+  
+  # Copy mode: also copy on Enter key
+  unbind -T copy-mode-vi Enter
+  bind -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "wl-copy"
+} {
+  # X11 (traditional Linux with X server)
+  # Copy mode: pipe selection to xclip when releasing mouse
+  bind -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "xclip -i -selection clipboard"
+  
+  # Copy mode: yank with 'y' to xclip
+  bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "xclip -i -selection clipboard"
+  
+  # Copy mode: also copy on Enter key
+  unbind -T copy-mode-vi Enter
+  bind -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "xclip -i -selection clipboard"
+}
+
+# Set the shell path for Linux
+set -g default-shell /bin/zsh
+
+# TERM environment variable
+set -g default-terminal "screen-256color"
